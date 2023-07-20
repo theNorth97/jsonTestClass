@@ -2,19 +2,21 @@
 
 namespace Tests\Feature;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
 use Tests\TestCase;
 use App\Services\JsonPlaceholderApi;
 
 class JsonPlaceholderApiTest extends TestCase
 {
+    private JsonPlaceholderApi $api;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->api = new JsonPlaceholderApi();
+    }
 
     public function testAddPost(): void
     {
-        $api = new JsonPlaceholderApi();
 
         $newPostData = [
             'userId' => 1,
@@ -22,7 +24,7 @@ class JsonPlaceholderApiTest extends TestCase
             'body' => 'New post content',
         ];
 
-        $newPost = $api->addPost($newPostData);
+        $newPost = $this->api->addPost($newPostData);
 
         $this->assertIsArray($newPost);
         $this->assertArrayHasKey('userId', $newPost);
@@ -37,7 +39,6 @@ class JsonPlaceholderApiTest extends TestCase
 
     public function testUpdatePost(): void
     {
-        $api = new JsonPlaceholderApi();
 
         $newPostData = [
             'userId' => 1,
@@ -45,7 +46,7 @@ class JsonPlaceholderApiTest extends TestCase
             'body' => 'New post content',
         ];
 
-        $newPost = $api->addPost($newPostData);
+        $newPost = $this->api->addPost($newPostData);
 
         $this->assertIsArray($newPost);
         $this->assertArrayHasKey('id', $newPost);
@@ -59,7 +60,7 @@ class JsonPlaceholderApiTest extends TestCase
             'id' => 1
         ];
 
-        $updatedPost = $api->updatePost($postId, $updatedPostData);
+        $updatedPost = $this->api->updatePost($postId, $updatedPostData);
 
         $this->assertIsArray($updatedPost);
         $this->assertArrayHasKey('id', $updatedPost);
@@ -70,10 +71,9 @@ class JsonPlaceholderApiTest extends TestCase
 
     public function testDeletePost(): void
     {
-        $api = new JsonPlaceholderApi();
 
         $postId = 1;
-        $api->deletePost($postId);
+        $this->api->deletePost($postId);
 
         $this->expectNotToPerformAssertions();
     }
